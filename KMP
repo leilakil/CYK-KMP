@@ -1,0 +1,56 @@
+#алгоритм Алфред Корасика
+def AC(substring, line):
+    for i in range(len(line)-len(substring)+1):
+        sucess = True
+        for j in range(len(substring)):
+            if substring[j] != line[i+j]:
+                sucess = False
+                break
+            if sucess:
+                n = i
+                break
+    return (len(line))
+
+# считывание префикс функцию
+def prefix(s):
+    v = [0]*len (s)
+    for i in range(1, len(s)):
+        k = v [i-1]
+        while k>0 and s[k]!= s[i]:
+            k = v[k-1]
+        if s[k] == s[i]:
+            k+=1
+        v[i] = k
+        #print(v)
+        return v
+# Алгоритм Кнута — Морриса — Пратта           
+def KnuthMorrisPratt(substring, line):
+    index = -1 
+    # вызов префекс функции
+    pref = prefix(substring)
+    k = 0
+    for i in range(len(line)):
+        while k>0 and substring[k]!= line[i]:
+            k = pref [k-1]
+        if substring [k] == line[i]:
+            k+=1
+        if k == len(substring):
+            index = i - len(substring)+1
+            break
+        print (i, '\t', k)
+    return index
+
+
+#читаем строку и подстроку 
+substring = "abcd"
+line = " abcabeabcabcabd"
+# вызов функции AC
+res = AC(substring, line)
+if res == -1 : # если подстроки нет, возвращает нет вхождение 
+    print("Not present", '\n')
+else:  # если подстрока есть возвращает индекс последнего вхождение 
+    print("Present at index " + str(res), '\n')
+
+
+# вызов функции KnuthMorrisPratt  
+res1 = KnuthMorrisPratt(substring, line)
