@@ -1,0 +1,67 @@
+# грамматика
+gram = { 
+     "S": [["Det", "Nom"]], 
+     "Nom": [["AP", "Nom"], ['print(string)'],  
+             ['        string\n']], 
+     "AP": [["Adv", "A"], ['    if ****:\n'],  
+            ['        string\n']], 
+     "Det": [['import os\n']], 
+     "Adv": [['for ****:\n']], 
+     "A": [['    if ****:\n'], ['        string\n'], ['print(string)']] 
+    }
+
+
+
+# Функция алгоритма CYK
+def cyk(w): 
+    n = len(w) 
+      
+    # Инициализация таблицы
+    T = [[set([]) for j in range(n)] for i in range(n)] 
+  
+    # Заполнение таблицы
+    for j in range(0, n): 
+  
+        # правила
+        for lhs, rule in gram.items(): 
+            for rhs in rule: 
+                  
+                # терминал найден, добавляется терминал
+                if len(rhs) == 1 and rhs[0] == w[j]: 
+                    T[j][j].add(lhs) 
+  
+        for i in range(j, -1, -1):    
+               
+            for k in range(i, j + 1):      
+
+                for lhs, rule in gram.items(): 
+                    for rhs in rule: 
+                          
+                        if len(rhs) == 2 and rhs[0] in T[i][k] and rhs[1] in T[k + 1][j]: 
+                            T[i][j].add(lhs) 
+    #print(T)
+  
+    # если текст совпадает будет True 
+    print(T[0][n-1])
+    if len(T[0][n-1]) != 0: 
+        print("True") 
+        
+    else: 
+        print("False") 
+    
+
+# читаем текст 
+write =[
+    'import os\n',
+    'for ****:\n',
+    '    if ****:\n',
+    '        string\n',
+    'print(string)'
+]
+
+
+
+  
+# вызов функции 
+cyk(write) 
+
